@@ -4,6 +4,7 @@ const colors = require("colors");
 const morgan = require("morgan");
 const cors = require("cors");
 const connectDB = require("./config/db");
+const path =require("path");
 //dot config
 dotenv.config();
 
@@ -17,6 +18,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
+app.use(express.static(path.join(__dirname,'./client/build')));
 
 //routes
 // 1 test route
@@ -35,6 +37,9 @@ app.use("/api/v1/admin", require("./routes/adminRoutes"));
 //     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
 //   });
 // }
+app.use('*',function(req,res){
+  res.sendFile(path.join(__dirname,'./client/build/index.html'));
+})
 
 //port
 const PORT = process.env.PORT || 8080;
