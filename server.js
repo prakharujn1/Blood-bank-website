@@ -18,7 +18,11 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
+
+//static files access
 app.use(express.static(path.join(__dirname,'./client/build')));
+
+
 
 //routes
 // 1 test route
@@ -27,17 +31,8 @@ app.use("/api/v1/auth", require("./routes/authRoutes"));
 app.use("/api/v1/inventory", require("./routes/inventoryRoutes"));
 app.use("/api/v1/analytics", require("./routes/analyticsRoutes"));
 app.use("/api/v1/admin", require("./routes/adminRoutes"));
-// if (process.env.NODE_ENV === 'development') {
-//   // Exprees will serve up production assets
-//   app.use(express.static('client/build'));
 
-//   // Express serve up index.html file if it doesn't recognize route
-//   const path = require('path');
-//   app.get('*', (req, res) => {
-//     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-//   });
-// }
-app.use('*',function(req,res){
+app.get('*',function(req,res){
   res.sendFile(path.join(__dirname,'./client/build/index.html'));
 })
 
@@ -45,12 +40,7 @@ app.use('*',function(req,res){
 const PORT = process.env.PORT || 8080;
 
 //listen
-// app.listen(PORT, () => {
-//   console.log(
-//     `Node Server Running In ${process.env.DEV_MODE} ModeOn Port ${process.env.PORT}`
-//       .bgBlue.white
-//   );
-// });
+
 app.listen(PORT, (err) => {
   if (err) {
       return console.error(err);
